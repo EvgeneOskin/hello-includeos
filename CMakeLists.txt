@@ -9,18 +9,23 @@ project(demo_service)
 
 set(SERVICE_NAME "hello world example")
 
-set(BINARY_NAME "hello_world")
+set(BINARY "hello_world")
 
-set(SOURCE
+set(SOURCES
   service.cpp
+  )
+
+set(LIBRARIES
+  "libmana.a"
   )
 
 set(DRIVERS
   # silent_start
-  # virtionet
+  virtionet
   )
 
 set(PLUGINS
+  syslogd
   )
 
 include($ENV{INCLUDEOS_PREFIX}/includeos/post.service.cmake)
