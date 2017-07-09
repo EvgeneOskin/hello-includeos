@@ -1,7 +1,9 @@
 #include <os>
 #include <mana/server.hpp>
+#include <mana/middleware/parsley.hpp>
 #include <net/inet4>
 #include <syslog.h>
+#include "models.hpp"
 
 extern "C" int main();
 
@@ -25,6 +27,18 @@ void Service::start(const std::string&) {
       res->source().add_body("Hello world");
       res->send();
     });
+  router.on_get("/welcome/:name/", [] (mana::Request_ptr req, auto res) {
+      auto& params = req->params();
+      std::string name = params.get("name");
+
+      hello::Person person(name);
+
+      res->send_json(person.json());
+    });
+
   server = std::make_unique<mana::Server>(inet.tcp());
+
+  mana::Middleware_ptr jsonMiddleware = std::make_shared<mana::middleware::Parsley>();
+  server->use(jsonMiddleware);
   server->set_routes(router).listen(80);
 }
