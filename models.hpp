@@ -24,6 +24,9 @@ namespace hello {
     writer.Key("name");
     writer.String(name);
 
+    writer.Key("title");
+    writer.String("Welcome " + name);
+
     writer.EndObject();
   }
 
